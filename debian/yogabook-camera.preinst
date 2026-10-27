@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	dpkg-divert --package yogabook-camera --rename \
+		--divert /usr/bin/snapshot.distrib --add /usr/bin/snapshot
+fi
+#DEBHELPER#

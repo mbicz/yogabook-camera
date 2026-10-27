@@ -1,0 +1,23 @@
+#!/bin/sh
+# GNOME Camera without GL in GDK. yogabook-camera installs this as
+# /usr/bin/snapshot and diverts the real binary to /usr/bin/snapshot.distrib
+# (dpkg-divert), so every launcher, including the desktop entry, runs it.
+#
+# With GL, aperture wraps gtk4paintablesink in glsinkbin: GStreamer uploads frames
+# on its own "gstglcontext" thread in a GL context shared with GTK's renderer.
+# On this Cherry Trail (Mesa 25.0.7 gallium) the two threads race inside the
+# same driver function and memcpy writes past a mapping: snapshot segfaults
+# (error 6, libc memcpy from libgallium) within seconds of a screen turn.
+# Without a GDK GL context the sink hands GTK plain memory textures and only one
+# thread renders.
+#
+# offload: GTK 4.18 (Debian 4.18.6) stacks an offloaded subsurface above itself
+# when the same subsurface node is visited twice in one frame (gskoffload.c:
+# place_above = last_info->subsurface; guarded on GTK main, not on gtk-4-18),
+# logging "gdk_subsurface_attach: assertion 'sibling != subsurface' failed".
+#
+# Choose the posture's default on launch; manual switching remains available.
+if preferred=$(/usr/bin/yb-camerad --default-camera); then
+	gsettings set org.gnome.Snapshot last-camera-id "$preferred"
+fi
+GDK_DISABLE=gl,offload exec /usr/bin/snapshot.distrib "$@"

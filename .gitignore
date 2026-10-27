@@ -1,0 +1,7 @@
+/yb-camerad
+/debian/.debhelper/
+/debian/yogabook-camera/
+/debian/debhelper-build-stamp
+/debian/files
+/debian/*.debhelper.log
+/debian/*.substvars

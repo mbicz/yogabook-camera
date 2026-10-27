@@ -1,0 +1,13 @@
+yogabook-camera (0.1) unstable; urgency=medium
+
+  * First public early release of the standalone two-camera daemon and package.
+  * Preserve the daemon from local development build 1.1.7 without introducing
+    a new camera algorithm or claiming final image-quality acceptance.
+  * Include PipeWire, WirePlumber, systemd user-service and Snapshot integration.
+  * Document pinned kernel prerequisites and include the camera-only ACPI
+    patcher for a user-supplied stock DSDT; do not redistribute firmware or AML.
+  * Include the GPLv2 license and correct MIT attribution and license text for
+    the companion upstream PipeWire colourimetry backport.
+  * Omit the unrelated legacy plugin and device-specific hardware-lab scripts.
+
+ -- Michal Bicz <2608098+mbicz@users.noreply.github.com>  Tue, 27 Oct 2026 12:00:00 -0700

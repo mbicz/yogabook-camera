@@ -1,0 +1,24 @@
+Source: yogabook-camera
+Section: video
+Priority: optional
+Maintainer: Michal Bicz <2608098+mbicz@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13), pkgconf, libpipewire-0.3-dev, libspa-0.2-dev, libsystemd-dev
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+Homepage: https://github.com/mbicz/yogabook-camera
+Vcs-Git: https://github.com/mbicz/yogabook-camera.git
+Vcs-Browser: https://github.com/mbicz/yogabook-camera
+
+Package: yogabook-camera
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, pipewire, wireplumber
+Recommends: snapshot
+Description: Lenovo Yoga Book YB1-X90F cameras for PipeWire
+ yb-camerad publishes the AtomISP front (OV2740) and rear (OV8858) sensors as
+ two PipeWire cameras with their location, rotates the frames to follow the
+ screen and opens /dev/video0 only while an application streams. A WirePlumber
+ rule hides the raw AtomISP node.
+ .
+ GNOME Camera is started without GL and graphics offload (a Mesa GL-thread
+ race and a GTK 4.18 offload bug crash it on this hardware); the package
+ diverts /usr/bin/snapshot to a wrapper that does this.

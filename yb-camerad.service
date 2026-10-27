@@ -1,0 +1,31 @@
+[Unit]
+Description=Yoga Book front and rear cameras for PipeWire (rotated with the screen)
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+# System users (the GDM greeter) do not need the cameras.
+ConditionUser=!@system
+
+[Service]
+# --front-rot / --rear-rot: clockwise turn of each camera's frames for the
+# panel transforms 0,1,2,3 (org.gnome.Mutter.DisplayConfig). Transform 0 is
+# laptop mode; transform T turns the UI 90*T degrees counter-clockwise on the
+# glass (measured from the scanout buffer, 2026-10-20).
+# A correct preview stays put on the glass when only the screen turns, so a
+# camera the app mirrors (front) turns with the UI and one it does not (rear)
+# turns against it: front = f0 - 90*T, rear = r0 + 90*T.
+# f0 = 0: in laptop mode the raw front frame is upright (2026-10-20 report).
+# r0 = 180: with r0 = 0 the rear came out upside down (2026-10-21 report); the
+# rear sensor is mounted turned 180 degrees against the front.
+# --rear-unfolded 180: the rear OV8858 sits on the keyboard half, so the table
+# above holds only folded flat (keyboard behind the screen); opened, the hinge
+# has turned the camera half a turn against the screen (2026-10-22 report:
+# upside down in laptop pose).
+# --rear-unfolded-mirror: unfolded, the rear camera faces the user, and the
+# preview should be mirrored like a selfie view (2026-10-23 request).
+# Unfolded means 40..300 degrees; folded again at <= 15 or >= 345.
+ExecStart=/usr/bin/yb-camerad --front-rot 0,270,180,90 --rear-rot 180,270,0,90 --rear-unfolded 180 --rear-unfolded-mirror
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=pipewire.service
